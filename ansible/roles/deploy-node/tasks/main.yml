@@ -1,0 +1,56 @@
+---
+- name: Check if xcat is available
+  xcat_cmd:
+    command: lsdef
+    options:
+      "--version": ""
+
+- name: Check if osimage exists
+  xcat_cmd:
+    command: lsdef
+    options:
+      "-t": "osimage"
+    args:
+      - "{{ osimage }}"
+    environment:
+      "xcat_env_path": "{{ xcat_env_path }}"
+  when: osimage is defined
+
+- name: Make host
+  xcat_cmd:
+    command: makehosts
+  delegate_to: localhost
+
+- name: Ensure kvm guest is removed
+  xcat_cmd:
+    command: "rmvm"
+    options:
+      "-p": ""
+      "-f": ""
+    args:
+      - "{{ nodename }}"
+  when:  ( def_attrs.mgt is defined ) and
+         ( def_attrs.mgt | trim == 'kvm' )
+  ignore_errors: True
+
+- name: Make kvm
+  xcat_cmd:
+    command: mkvm
+    options:
+      "-s": "{{ vmdisksize }}"
+    args:
+      - "{{ nodename }}"
+  when: ( def_attrs.mgt is defined) and ( def_attrs.mgt == 'kvm') and
+        (vmdisksize is defined)
+
+- name: Register console server
+  xcat_cmd:
+    command: makeconservercf
+
+- name: Rinstall operation system
+  xcat_cmd:
+    command: rinstall
+    args:
+      - "{{ nodename }}"
+      - "osimage={{ osimage }}"
+  when: ( def_attrs.mgt is defined) and (osimage is defined)

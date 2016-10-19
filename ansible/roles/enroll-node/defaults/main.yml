@@ -1,0 +1,3 @@
+---
+xcat_kvm_purge: "true"
+xcat_kvm_force: "true"

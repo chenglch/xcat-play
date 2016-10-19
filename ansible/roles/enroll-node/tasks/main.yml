@@ -1,0 +1,52 @@
+---
+- name: Check if xcat command work
+  xcat_cmd:
+   command: "lsdef"
+   options:
+     "--version": ""
+
+- name: Show the node info if exist
+  xcat_cmd:
+    command: "lsdef"
+    args:
+      - "{{ nodename }}"
+    format_obj: True
+  register: xcat_node_info
+  ignore_errors: True
+
+- name: Ensure kvm guest is removed
+  xcat_cmd:
+    command: "rmvm"
+    options:
+      "-p": ""
+      "-f": ""
+    args:
+      - "{{ nodename }}"
+  when: ( xcat_kvm_purge == 'true') and
+         ( xcat_kvm_force == 'true') and
+         ( xcat_node_info['xcat_objs'][0]['mgt'] is defined) and
+         ( xcat_node_info['xcat_objs'][0]['mgt'] | trim == 'kvm')
+  ignore_errors: True
+
+- name: Delete node if exist
+  xcat_cmd:
+    command: "rmdef"
+    args:
+      - "{{ nodename }}"
+  ignore_errors: True
+
+- name: Define a variable for defining node object
+  set_fact:
+    xcat_obj_attrs: ""
+
+- name: Combine object attributes into defining statement
+  set_fact:
+    xcat_obj_attrs: "{{ xcat_obj_attrs }}{{ item.key }}={{ item.value }} "
+  with_dict: "{{ def_attrs }}"
+
+- name: Define node
+  xcat_cmd:
+    command: "mkdef"
+    args:
+      - "{{ nodename }}"
+      - "{{ xcat_obj_attrs }}"

@@ -1,0 +1,59 @@
+---
+  management:
+    hostname: "c910f05c01bc01k10"
+    provision_address: "10.5.101.10"
+    dns:
+      nameserver: "10.5.101.10"
+      forwarders: "10.0.0.103"
+      domain: "cluster.com"
+    external_ntp_server: ""
+    osimage:
+      "ubuntu16.04.1-x86_64-install-compute": "/iso/ubuntu-16.04.1-server-amd64.iso"
+      # "ubuntu-14.04.1-server-ppc64el-install-compute": "/iso/ubuntu-14.04.1-server-ppc64el.iso"
+
+  localhost:
+    ipv4_address: "127.0.0.1"
+
+  kvmhost:
+    def_attrs:
+      groups: "all"
+      ip: "10.5.101.1"
+
+  kvmguest1:
+    def_attrs:
+      arch: "x86_64"
+      groups: "all"
+      ip: "10.5.101.60"
+      mac: "42:af:0a:05:65:6b"
+      mgt: "kvm"
+      netboot: "xnba"
+      serialport: "0"
+      serialspeed: "115200"
+      vmcpus: "1"
+      vmhost: "kvmhost"
+      vmmemory: "2048"
+      vmnicnicmodel: "virtio"
+      vmnics: "br-eno1"
+      vmstorage: "dir:///install/vms"
+
+    osimage: ubuntu16.04.1-x86_64-install-compute
+    vmdisksize: "10G"
+
+  kvmguest2:
+    def_attrs:
+      arch: "x86_64"
+      groups: "all"
+      ip: "10.5.101.61"
+      mgt: "kvm"
+      netboot: "xnba"
+      serialport: "0"
+      serialspeed: "115200"
+      vmcpus: "1"
+      vmhost: "kvmhost"
+      vmmemory: "2048"
+      vmnicnicmodel: "virtio"
+      vmnics: "br-eno1"
+      vmstorage: "dir:///install/vms"
+
+    osimage: ubuntu16.04.1-x86_64-install-compute
+    vmdisksize: "10G"

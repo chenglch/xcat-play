@@ -1,0 +1,7 @@
+include setup.py
+include setup.cfg
+include MANIFEST.in
+recursive-include xcatplay *.py
+recursive-include ansible *
+prune *.pyc
+prune .gitignore

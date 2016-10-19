@@ -1,0 +1,3 @@
+# Defualt value to set the passwd table
+xcat_system_user: root
+xcat_system_password: cluster

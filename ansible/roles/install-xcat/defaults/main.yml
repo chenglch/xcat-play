@@ -1,0 +1,3 @@
+---
+go_xcat_url: "https://xcat.org/files/go-xcat"
+xcatd_path: "/opt/xcat/sbin/xcatd"

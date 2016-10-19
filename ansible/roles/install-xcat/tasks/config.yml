@@ -1,0 +1,113 @@
+---
+- name: xcat master setting in site table
+  xcat_cmd:
+    command: chdef
+    options:
+      "-t": "site"
+    args:
+      - "master={{ hostvars[inventory_hostname]['provision_address'] }}"
+
+- name: DNS setting in site table for xcat
+  xcat_cmd:
+    command: chdef
+    options:
+      "-t": "site"
+    args:
+      - "nameservers={{ dns.nameserver }}"
+      - "forwarders={{ dns.forwarders }}"
+      - "domain={{ dns.domain }}"
+
+- name: Hostname setting
+  hostname: name={{ hostname }}
+  when: ansible_hostname != hostname
+
+- name: Delete host in /etc/hosts
+  lineinfile: dest=/etc/hosts regexp="{{ provision_address }}" state='absent'
+  ignore_errors: True
+
+- name: Add host in /etc/hosts
+  lineinfile: >
+    dest=/etc/hosts
+    state="present"
+    line="{{ provision_address }}\t{{ hostname }}\t{{ hostname }}.{{ dns.domain }}"
+
+- name: Delete domain in /etc/resolv.conf
+  lineinfile: dest=/etc/resolv.conf regexp="domain" state='absent'
+  ignore_errors: True
+
+- name: Delete nameserver in /etc/resolv.conf
+  lineinfile: dest=/etc/resolv.conf regexp="nameserver" state='absent'
+  ignore_errors: True
+
+- name: Add domain in /etc/resolv.conf
+  lineinfile: >
+    dest=/etc/resolv.conf
+    state="present"
+    line="domain\t{{ dns.domain }}"
+
+- name: Add nameserver in /etc/resolv.conf
+  lineinfile: >
+    dest=/etc/resolv.conf
+    state="present"
+    line="nameserver\t{{ dns.nameserver }}"
+
+- name: Call xcat command makedns
+  xcat_cmd:
+    command: makedns
+    options:
+      "-n": ""
+
+- name: NTP setting in site table for xcat
+  xcat_cmd:
+    command: chdef
+    options:
+      "-t": "site"
+    args:
+      - "extntpservers={{ external_ntp_server }}"
+  when: not (external_ntp_server | trim == '')
+
+- name: Configure defalut system passwd
+  xcat_cmd:
+    command: chtab
+    args:
+      - "key=system"
+      - "passwd.username={{ xcat_system_user }}"
+      - "passwd.password={{ xcat_system_password }}"
+
+- name: Check if osimage exists
+  xcat_cmd:
+    command: lsdef
+    options:
+      "-t": "osimage"
+    args:
+      - "{{ item.key }}"
+  with_dict: "{{ osimage }}"
+  register: osimage_result
+  ignore_errors: True
+
+- name: Define a variable iso_list
+  set_fact: iso_list="[]"
+
+- name: Collect iso that is not defined in xcat
+  set_fact: iso_list="{{ iso_list }}  + [ '{{ item.item.value }}' ]"
+  when: (item.failed is defined) and (item.failed == true)
+  with_items: "{{ osimage_result.results }}"
+
+- name: Run copycds command create osimage
+  xcat_cmd:
+    command: copycds
+    args:
+      - "{{ item }}"
+  with_items: "{{ iso_list }}"
+
+- name: Make dhcp -n
+  xcat_cmd:
+    command: makedhcp
+    options:
+      "-n": ""
+
+- name: Make dhcp -a
+  xcat_cmd:
+    command: makedhcp
+    options:
+      "-a": ""

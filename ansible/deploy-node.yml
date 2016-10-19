@@ -1,0 +1,8 @@
+---
+
+- hosts: compute
+  connection: local
+  name: "Import os image"
+  become: yes
+  roles:
+    - role: deploy-node

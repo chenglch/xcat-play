@@ -1,0 +1,9 @@
+---
+
+- hosts: management
+  connection: local
+  name: "Setup xcat Management Node"
+  become: yes
+  roles:
+    - role: install-xcat
+

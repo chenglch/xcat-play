@@ -1,0 +1,7 @@
+---
+- hosts: compute
+  connection: local
+  name: "Enroll nodes from inventory into xcat"
+  become: true
+  roles:
+    - role: enroll-node
