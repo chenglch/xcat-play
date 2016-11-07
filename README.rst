@@ -40,10 +40,10 @@ Use
 ====
 
 Edit ``./ansible/inventory/inventory.yml.example`` to match your environment.
-The ``inventory.yml.example`` file is intended for steps executed upon the
-nodes, such as xcat installation or node deployment. Make sure the iso path for
-osimage is correct. For most cases, mangement node is localhost, and the other
-nodes are compute nodes.
+The ``inventory.yml.example`` file defines the target nodes where the playbook
+is running on and it also defines the properties that nodes or groups have,
+such as the mac address of a node or which osimage should be deployed. For most
+cases, mangement node is localhost, and the other nodes are compute nodes.
 
 Example
 -------

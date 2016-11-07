@@ -1,0 +1,16 @@
+redhat]
+10.5.101.64 # th7 x86
+10.5.101.65 # rh6 x86
+10.2.3.2 # rh7 ppc64
+10.2.3.4   # rh6 ppc64
+10.3.29.2  # rh7 ppc64le
+[ubuntu]
+#testnode1 # ubuntu 16.04
+10.5.101.11 # ubuntu 14.04 x86_64
+10.3.4.10 #ubuntu 14.04 ppc64le
+
+[sles]
+10.5.101.70
+10.5.101.72    # x86_64 sles 11.4
+10.3.4.4  # ppc64le sles12
+#10.2.1.25 # ppc64 sles11.4  ansible error

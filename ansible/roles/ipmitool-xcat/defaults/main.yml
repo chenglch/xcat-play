@@ -1,0 +1,25 @@
+---
+"xcat_dep_url": "https://github.com/xcat2/xcat-dep.git"
+"xcat_dep_path": "/tmp/xcat-dep"
+"xcat_ipmitool_target_path": "/tmp/build/ipmitool/"
+"xcat_rhels_target_path": "/tmp/build/"
+
+"sles12_src_path": "/tmp/sles/rpms/"
+
+# for sles 12 x86_64
+"sles12_x86_openssl_rpm": "libopenssl-devel-1.0.1i-2.12.x86_64.rpm"
+"sles12_x86_zlib_rpm": "zlib-devel-1.2.8-5.1.x86_64.rpm"
+
+
+# for sles 11.4 x86_64
+"sles11_4_x86_openssl_rpm": "libopenssl-devel-0.9.8j-0.70.1.x86_64.rpm"
+"sles11_4_x86_zlib_rpm": "zlib-devel-1.2.7-0.12.3.x86_64.rpm"
+
+# for sles 11.4 ppc64
+"sles11_4_ppc64_openssl_rpm": "libopenssl-devel-0.9.8j-0.70.1.ppc64.rpm"
+"sles11_4_ppc64_zlib_rpm": "zlib-devel-1.2.7-0.12.3.ppc64.rpm"
+
+
+# for sles 12 ppc64le
+"sles12_ppc64le_openssl_rpm": "libopenssl-devel-1.0.1i-2.12.ppc64le.rpm"
+"sles12_ppc64le_zlib_rpm": "zlib-devel-1.2.8-5.1.ppc64le.rpm"

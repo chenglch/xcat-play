@@ -1,0 +1,40 @@
+---
+- name: Delete xcat-dep directory if exists
+  file: path="{{ xcat_dep_path }}" state=absent
+  delegate_to: localhost
+  run_once: True
+  ignore_errors: True
+
+- name: Delete xcat-dep directory on remote
+  file: path="{{ xcat_dep_path }}" state=absent
+
+- name: Get xcat-dep from github
+  git: repo="{{ xcat_dep_url }}"
+       dest="{{ xcat_dep_path }}"
+  delegate_to: localhost
+  run_once: true
+
+- name: Create xcat-dep directory
+  file: path=/tmp/xcat-dep state=directory
+
+- name: Copy xcat-dep to remote
+  copy: src={{ xcat_dep_path }}/ipmitool dest={{ xcat_dep_path }}
+
+- name: Create build target directory
+  file: path="{{ xcat_ipmitool_target_path}}" state=directory
+
+- name: Include ubuntu template to build the package
+  include: ubuntu.yml
+  when: ansible_distribution == 'Ubuntu'
+
+- name: Include redhat template to build the package
+  include: redhat.yml
+  when: ansible_distribution == 'RedHat'
+
+- name: Include sles template to build the package
+  include: sles.yml
+  when: ansible_distribution == 'SLES'
+
+- name: Delete xcat-dep directory on remote
+  file: path="{{ xcat_dep_path }}" state=absent
+

@@ -1,0 +1,132 @@
+- name: Add execution permission for bldipmi.pl script
+  file: path=/tmp/xcat-dep/ipmitool/bldipmi.pl mode=u+x
+
+- name: Create rpms directory
+  file: path=/tmp/rpms state=directory
+
+# for sles 12 x86_64
+
+- name: Copy rpm x86 dependencies for sles12
+  copy: src="{{ item }}" dest=/tmp/rpms
+  with_items:
+    - "{{ sles12_x86_openssl_rpm }}"
+    - "{{ sles12_x86_zlib_rpm }}"
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "x86_64")
+
+- name: install zlib x86 dependency for sles12
+  shell: zypper install -y {{ sles12_x86_zlib_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "x86_64")
+
+- name: install openssl x86 dependency for sles12
+  shell: zypper install -y {{ sles12_x86_openssl_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "x86_64")
+
+- name: install rpmbuild x86 dependency for sles12
+  zypper: name={{ item }} state=present
+  with_items:
+    - rpmbuild
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "x86_64")
+
+# for sles 11.4 x86_64
+- name: Copy rpm x86_64 dependencies for sles11.4
+  copy: src="{{ item }}" dest=/tmp/rpms
+  with_items:
+    - "{{ sles11_4_x86_openssl_rpm }}"
+    - "{{ sles11_4_x86_zlib_rpm }}"
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "x86_64")
+
+- name: install zlib x86_64 dependency for sles11.4
+  shell: zypper install -y {{ sles11_4_x86_zlib_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "x86_64")
+
+- name: install openssl x86_64 dependency for sles11.4
+  shell: zypper install -y {{ sles11_4_x86_openssl_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "x86_64")
+
+- name: install gcc x86_64 dependency for sles11.4
+  zypper: name={{ item }} state=present
+  with_items:
+    - gcc
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "x86_64")
+
+
+# for sles 11.4 ppc64
+- name: Copy rpm ppc64 dependencies for sles11.4
+  copy: src="{{ item }}" dest=/tmp/rpms
+  with_items:
+    - "{{ sles11_4_ppc64_openssl_rpm }}"
+    - "{{ sles11_4_ppc64_zlib_rpm }}"
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "ppc64")
+
+- name: install zlib ppc64 dependency for sles11.4
+  shell: zypper install -y {{ sles11_4_ppc64_zlib_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "ppc64")
+
+- name: install openssl ppc64 dependency for sles11.4
+  shell: zypper install -y {{ sles11_4_ppc64_openssl_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "ppc64")
+
+- name: install gcc ppc64 dependency for sles11.4
+  zypper: name={{ item }} state=present
+  with_items:
+    - gcc
+  when: (ansible_distribution_major_version == "11") and
+        (ansible_machine == "ppc64")
+
+
+# for sles 12 ppc64le
+- name: Copy rpm ppc64le dependencies for sles12
+  copy: src="{{ item }}" dest=/tmp/rpms
+  with_items:
+    - "{{ sles12_ppc64le_openssl_rpm }}"
+    - "{{ sles12_ppc64le_zlib_rpm }}"
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "ppc64le")
+
+- name: install zlib ppc64le dependency for sles12
+  shell: zypper install -y {{ sles12_ppc64le_zlib_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "ppc64le")
+
+- name: install openssl ppc64le dependency for sles12
+  shell: zypper install -y {{ sles12_ppc64le_openssl_rpm }} chdir=/tmp/rpms
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "ppc64le")
+
+- name: install rpmbuild on ppc64le dependency for sles12
+  zypper: name={{ item }} state=present
+  with_items:
+    - rpmbuild
+  when: (ansible_distribution_major_version == "12") and
+        (ansible_machine == "ppc64le")
+
+- name: Delete temp build directory on remote if exist
+  file: path="{{ xcat_rhels_target_path }}" state=absent
+  ignore_errors: True
+  
+- name: Make rpm package
+  shell: ./bldipmi.pl chdir=/tmp/xcat-dep/ipmitool
+
+- name: Find the target package file
+  find: paths="{{ xcat_rhels_target_path }}" recurse=yes patterns="*.rpm"
+  register: file_to_copy
+
+- name: Copy the rpm package to local
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ xcat_ipmitool_target_path }}/{{ item.path.split('/')[-3] }}/{{ item.path.split('/')[-2] }}/{{ item.path.split('/')[-1] }}"
+    flat: yes
+  when: (file_to_copy is defined) and (file_to_copy.files is defined) and
+        (item is defined) and (item.path is defined)
+  with_items: "{{ file_to_copy.files }}"

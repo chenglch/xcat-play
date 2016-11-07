@@ -32,7 +32,7 @@ setup(
         'Jinja2>=2.8',
         'six>=1.9.0',
         'PyYAML>=3.10.0',
-        'ansible>=1.9',
+        'ansible>=2.1',
     ],
 
     #license="GPLv3",

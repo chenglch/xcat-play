@@ -1,0 +1,12 @@
+---
+
+- hosts:
+    - redhat
+    - ubuntu
+    - sles
+  # strategy: free
+  name: "Build ipmitool"
+  become: yes
+  roles:
+    - role: ipmitool-xcat
+

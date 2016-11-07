@@ -1,0 +1,33 @@
+- name: Add execution permission for make_deb.sh script
+  file: path=/tmp/xcat-dep/ipmitool/make_deb.sh mode=u+x
+
+- name: Ensure apt cache is up to date
+  apt: update_cache=yes
+  ignore_errors: True
+
+- name: Setup dependencies to build package
+  apt: name={{item}}
+  with_items:
+    - dpkg-dev
+    - libreadline-dev
+    - libssl-dev
+    - quilt
+    - autotools-dev
+    - debhelper
+    - build-essential
+
+- name: Make deb package on ubuntu
+  shell: ./make_deb.sh chdir=/tmp/xcat-dep/ipmitool
+
+- name: Find the target package file
+  find: paths="{{ xcat_dep_path }}/ipmitool" recurse=no patterns="*.deb"
+  register: file_to_copy
+
+- name: Copy the deb package to local
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ xcat_ipmitool_target_path }}/{{ item.path.split('/')[-1] }}"
+    flat: yes
+  when: (file_to_copy is defined) and (file_to_copy.files is defined) and
+        (item is defined) and (item.path is defined)
+  with_items: "{{ file_to_copy.files }}"
