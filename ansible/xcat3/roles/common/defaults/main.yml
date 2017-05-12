@@ -1,0 +1,10 @@
+---
+"xcat3_url": "https://github.com/chenglch/xcat3.git"
+"xcat3_client_url": "https://github.com/chenglch/python-xcat3client.git"
+"xcat3_path": "/opt/xcat3"
+"xcat3_api_port": "3010"
+
+# pip cache
+"file_get_pip": "get-pip.py"
+"file_pip": "pip-8.1.1.tar.gz"
+"file_wheel": "wheel-0.24.0.tar.gz"

@@ -1,0 +1,23 @@
+---
+- name: Install packages for python-xcatclient
+  apt: name={{item}} state=latest
+  with_items:
+    - build-essential
+    - python-dev
+    - libssl-dev
+    - git
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Fetch python-xcat3client from github
+  git: repo="{{ xcat3_client_url }}"
+       dest="{{ xcat3_client_path }}"
+
+- name: Install python dependency for python-xcat3client project
+  pip:
+    requirements: "{{ xcat3_client_path }}/requirements.txt"
+
+- name: Setup python-xcat3client with develop version( not complete)
+  shell: python setup.py develop chdir="{{ xcat3_client_path }}"
+
+- name: Create xCAT3 configuration file
+  template: src=templates/xcat3.sh dest=/etc/profile.d/xcat3.sh owner=root mode=0600

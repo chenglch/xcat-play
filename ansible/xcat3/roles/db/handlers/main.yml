@@ -1,0 +1,12 @@
+---
+# Handler to handle DB tier notifications
+
+- name: restart mysql
+  service: name=mysql state=restarted
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: restart mariadb
+  systemd:
+    state: restarted
+    daemon_reload: yes
+    name: mariadb

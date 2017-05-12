@@ -1,0 +1,22 @@
+# only one host can be controller
+[controller]
+10.5.102.73
+
+[network]
+10.5.102.73
+
+[client]
+10.5.102.73
+
+[conductor]
+10.5.102.73
+10.5.102.74
+
+[mq]
+10.5.102.73
+
+[db]
+10.5.102.73
+
+[client]
+10.5.102.73

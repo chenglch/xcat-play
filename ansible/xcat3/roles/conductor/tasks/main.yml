@@ -1,0 +1,66 @@
+---
+- name: Install packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - apache2
+    - tftpd-hpa
+    - xinetd
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - httpd
+    - tftp-server
+    - xinetd
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Creates xcat3 data directory for tftpboot
+  file: path="{{ xcat3_data_dir }}/tftpboot" state=directory
+
+- name: Create tftp map file
+  template: src=templates/tftp_map_file.conf dest="/etc/xcat3/tftp_map_file" owner=root mode=0644
+
+- name: Create tftp configuration for xinetd service on debian system
+  template: src=templates/xinetd_tftp.conf dest="{{xinetd_conf_dir}}/tftp" owner=root mode=0644
+  notify: Restart xinetd service on Ubuntu
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Create tftp configuration for xinetd service on Redhat
+  template: src=templates/xinetd_tftp.conf dest="{{xinetd_conf_dir}}/tftp" owner=root mode=0644
+  notify: Restart xinetd service on Redhat
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Creates xcat3 data directory for http
+  file: path="{{ xcat3_data_dir }}/install" state=directory
+
+- name: Create configuration file for apache2 service
+  template: src=templates/xcat.conf.apache24 dest=/etc/apache2/conf-available//xcat.conf owner=root mode=0600
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Create configuration file for httpd service
+  template: src=templates/xcat.conf.apache24 dest=/etc/httpd/conf.d/xcat.conf owner=root mode=0644
+  notify: Restart httpd
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Enable xcat apache mod
+  file:
+    src: "/etc/apache2/conf-available/{{ item }}"
+    dest: "/etc/apache2/conf-enabled/{{ item }}"
+    state: link
+  with_items:
+    - xcat.conf
+  notify: Restart apache24
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Stop xcat3-conductor service if exist
+  shell: pkill xcat3-conductor
+  ignore_errors: True
+
+- name: Start xcat3-conductor daemon on Debian
+  shell: nohup /usr/local/bin/xcat3-conductor --config-file /etc/xcat3/xcat3.conf &
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Start xcat3-condcutor daemon on Rehat
+  shell: nohup /usr/bin/xcat3-conductor --config-file /etc/xcat3/xcat3.conf &
+  when: ansible_distribution == 'RedHat' and ansible_distribution_version|int >=7

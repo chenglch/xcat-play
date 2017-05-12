@@ -1,0 +1,80 @@
+---
+- name: Disable selinux configuration
+  shell: sed -i 's/^SELINUX=.*$/SELINUX=disabled/' /etc/selinux/config
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Disable selinux
+  shell: setenforce 0
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Install deb packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - ntp
+    - build-essential
+    - python-dev
+    - libssl-dev
+    - python-pip
+    - libmysqlclient-dev
+    - libxml2-dev
+    - libxslt-dev
+    - libpq-dev
+    - libffi-dev
+    - gettext
+    - git
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Install rpm packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - python-devel
+    - openssl-devel
+    - mysql-devel
+    - libxml2-devel
+    - libxslt-devel
+    - postgresql-devel
+    - git
+    - libffi-devel
+    - gettext
+    - python-setuptools
+    - gcc
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Create pip cache directory
+  file: path=/tmp/cache state=directory
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Copy cache files for pip installation(Test local installation)
+  copy: src="{{ item }}" dest=/tmp/cache
+  with_items:
+    - "{{ file_get_pip }}"
+    - "{{ file_pip }}"
+    - "{{ file_wheel }}"
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Setup pip with get-pip scripts
+  shell: python get-pip.py --no-index --find-links=/tmp/cache chdir=/tmp/cache
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Fetch xcat3 from github
+  git: repo="{{ xcat3_url }}"
+       dest="{{ xcat3_path }}"
+
+- name: Install python dependency for xcat3 project
+  pip:
+    requirements: "{{ xcat3_path }}/requirements.txt"
+
+- name: Setup xcat3 with develop version( not complete)
+  shell: python setup.py develop chdir="{{ xcat3_path }}"
+
+- name: Creates /etc/xcat3 directory
+  file: path=/etc/xcat3 state=directory
+
+- name: Creates /etc/xcat3 directory
+  file: path=/var/log/xcat3 state=directory
+
+- name: Creates xcat3 data directory
+  file: path={{ xcat3_data_dir }} state=directory
+
+- name: Create xCAT3 configuration file
+  template: src=templates/xcat3.conf dest=/etc/xcat3/xcat3.conf owner=root mode=0600

@@ -1,0 +1,6 @@
+---
+"rabbit_user": "xcat3"
+"rabbit_password": "cluster"
+"rabbit_port": "5672"
+
+"epel_rpm": "epel-release-7-9.noarch.rpm"

@@ -1,0 +1,1 @@
+export XCAT3_URL=http://{{ xcat3_api_ip_address }}:{{ xcat3_api_port }}

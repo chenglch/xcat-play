@@ -1,10 +1,5 @@
 ---
-- name: Delete xcat-dep directory if exists
-  file: path="{{ xcat_dep_path }}" state=absent
-  delegate_to: localhost
-  run_once: True
-  ignore_errors: True
-
+tasks:
 - name: Delete xcat-dep directory on remote
   file: path="{{ xcat_dep_path }}" state=absent
 
