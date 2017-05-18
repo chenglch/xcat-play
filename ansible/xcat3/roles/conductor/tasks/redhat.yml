@@ -1,0 +1,15 @@
+---
+- name: Install packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - httpd
+    - tftp-server
+    - xinetd
+
+- name: Create configuration file for httpd service
+  template: src=templates/xcat.conf.apache24 dest=/etc/httpd/conf.d/xcat.conf owner=root mode=0644
+  notify: Restart httpd
+
+- name: Set conductor_bin variable
+  set_fact:
+    conductor_bin: "/usr/bin/xcat3-conductor"

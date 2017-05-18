@@ -10,3 +10,4 @@
     state: restarted
     daemon_reload: yes
     name: mariadb
+  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7

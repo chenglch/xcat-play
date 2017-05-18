@@ -1,0 +1,16 @@
+---
+- name: Install deb packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - ntp
+    - build-essential
+    - python-dev
+    - libssl-dev
+    - python-pip
+    - libmysqlclient-dev
+    - libxml2-dev
+    - libxslt-dev
+    - libpq-dev
+    - libffi-dev
+    - gettext
+    - git

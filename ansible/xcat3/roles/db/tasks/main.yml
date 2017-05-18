@@ -1,65 +1,17 @@
 ---
-- name: Install MySQL packages
-  apt: name={{ item }} state=latest
-  with_items:
-    - mysql-server
-    - python-mysqldb
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-- name: Install MariaDB packages
-  yum: name={{ item }} state=latest
-  with_items:
-    - mariadb
-    - mariadb-server
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-# mariadb do not start automatically
-- name: Start MariaDB Server
-  systemd:
-    state: started
-    daemon_reload: yes
-    name: mariadb
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
 - name: Install python dependency for mysql-python
   pip:
     name: "{{ item }}"
   with_items:
     - MySQL-python
+
+- name: Include ubuntu template to setup common roles
+  include: ubuntu.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Include ubuntu template to setup common roles
+  include: redhat.yml
   when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Bind remote address for mysql on Ubuntu16.04
-  ini_file: dest=/etc/mysql/mysql.conf.d/mysqld.cnf
-            section=mysqld
-            option=bind-address
-            value={{item}}
-  with_items:
-    - "{{mysql_bind_address}}"
-  notify:
-    - restart mysql
-  when: ansible_distribution_version == '16.04' or ansible_distribution == 'Ubuntu'
-
-- name: Bind remote address for mysql on Ubuntu14.04
-  ini_file: dest=/etc/mysql/my.cnf
-            section=mysqld
-            option=bind-address
-            value={{item}}
-  with_items:
-    - "{{mysql_bind_address}}"
-  notify:
-    - restart mysql
-  when: ansible_distribution_version == '14.04' or ansible_distribution == 'Ubuntu'
-
-- name: Bind remote address for mariadb on Redhat
-  ini_file: dest=/etc/mysql/my.cnf
-            section=mysqld
-            option=bind-address
-            value={{item}}
-  with_items:
-    - "{{mysql_bind_address}}"
-  notify:
-    - restart mariadb
-  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7
 
 - name: Fluash mysql configuration
   meta: flush_handlers

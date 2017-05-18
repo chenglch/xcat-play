@@ -1,39 +1,10 @@
 ---
-- name: Create rpm cache directory
-  file: path=/tmp/cache state=directory
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Enable epel yum repo
-  copy: src="{{ item }}" dest=/tmp/cache
-  with_items:
-    - "{{ epel_rpm }}"
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Setup epel yum repo
-  yum: name={{ item }} state=present
-  with_items:
-    - "/tmp/cache/{{ epel_rpm }}"
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-  ignore_errors: True
-
-- name: Install rabbitmq deb packages
-  apt: name={{ item }} state=latest
-  with_items:
-    - rabbitmq-server
+- name: Include ubuntu template to setup common roles
+  include: ubuntu.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-- name: Install rabbitmq rpm packages
-  yum: name={{ item }} state=latest
-  with_items:
-    - rabbitmq-server
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-# rabbitmq do not start automatically
-- name: Start RabbitMq Server
-  systemd:
-    state: started
-    daemon_reload: yes
-    name: rabbitmq-server
+- name: Include ubuntu template to setup common roles
+  include: redhat.yml
   when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
 
 - rabbitmq_user:

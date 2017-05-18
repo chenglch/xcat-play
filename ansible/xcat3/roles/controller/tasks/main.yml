@@ -4,9 +4,4 @@
   ignore_errors: True
 
 - name: Start xcat3-api daemon
-  shell: nohup /usr/local/bin/xcat3-api --config-file /etc/xcat3/xcat3.conf &
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-- name: Start xcat3-api daemon on Rehat
-  shell: nohup /usr/bin/xcat3-api --config-file /etc/xcat3/xcat3.conf &
-  when: ansible_distribution == 'RedHat' and ansible_distribution_version|int >=7
+  shell: nohup xcat3-api --config-file /etc/xcat3/xcat3.conf &

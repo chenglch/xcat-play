@@ -1,59 +1,10 @@
 ---
-- name: Disable selinux configuration
-  shell: sed -i 's/^SELINUX=.*$/SELINUX=disabled/' /etc/selinux/config
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Disable selinux
-  shell: setenforce 0
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Install deb packages
-  apt: name={{ item }} state=latest
-  with_items:
-    - ntp
-    - build-essential
-    - python-dev
-    - libssl-dev
-    - python-pip
-    - libmysqlclient-dev
-    - libxml2-dev
-    - libxslt-dev
-    - libpq-dev
-    - libffi-dev
-    - gettext
-    - git
+- name: Include ubuntu template to setup common roles
+  include: ubuntu.yml
   when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
 
-- name: Install rpm packages
-  yum: name={{ item }} state=latest
-  with_items:
-    - python-devel
-    - openssl-devel
-    - mysql-devel
-    - libxml2-devel
-    - libxslt-devel
-    - postgresql-devel
-    - git
-    - libffi-devel
-    - gettext
-    - python-setuptools
-    - gcc
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Create pip cache directory
-  file: path=/tmp/cache state=directory
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Copy cache files for pip installation(Test local installation)
-  copy: src="{{ item }}" dest=/tmp/cache
-  with_items:
-    - "{{ file_get_pip }}"
-    - "{{ file_pip }}"
-    - "{{ file_wheel }}"
-  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
-
-- name: Setup pip with get-pip scripts
-  shell: python get-pip.py --no-index --find-links=/tmp/cache chdir=/tmp/cache
+- name: Include ubuntu template to setup common roles
+  include: redhat.yml
   when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
 
 - name: Fetch xcat3 from github

@@ -1,0 +1,23 @@
+---
+- name: Install packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - apache2
+    - tftpd-hpa
+    - xinetd
+
+- name: Create configuration file for apache2 service
+  template: src=templates/xcat.conf.apache24 dest=/etc/apache2/conf-available//xcat.conf owner=root mode=0600
+
+- name: Enable xcat apache mod
+  file:
+    src: "/etc/apache2/conf-available/{{ item }}"
+    dest: "/etc/apache2/conf-enabled/{{ item }}"
+    state: link
+  with_items:
+    - xcat.conf
+  notify: Restart apache24
+
+- name: Set conductor_bin variable
+  set_fact:
+    conductor_bin: "/usr/locl/bin/xcat3-conductor"

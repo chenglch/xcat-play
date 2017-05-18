@@ -1,0 +1,28 @@
+---
+- name: Install MySQL packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - mysql-server
+    - python-mysqldb
+
+- name: Bind remote address for mysql on Ubuntu16.04
+  ini_file: dest=/etc/mysql/mysql.conf.d/mysqld.cnf
+            section=mysqld
+            option=bind-address
+            value={{item}}
+  with_items:
+    - "{{mysql_bind_address}}"
+  notify:
+    - restart mysql
+  when: ansible_distribution_version == '16.04' or ansible_distribution == 'Ubuntu'
+
+- name: Bind remote address for mysql on Ubuntu14.04
+  ini_file: dest=/etc/mysql/my.cnf
+            section=mysqld
+            option=bind-address
+            value={{item}}
+  with_items:
+    - "{{mysql_bind_address}}"
+  notify:
+    - restart mysql
+  when: ansible_distribution_version == '14.04' or ansible_distribution == 'Ubuntu'

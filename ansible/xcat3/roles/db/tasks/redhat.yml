@@ -1,0 +1,24 @@
+---
+- name: Install MariaDB packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - mariadb
+    - mariadb-server
+
+# mariadb do not start automatically
+- name: Start MariaDB Server
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: mariadb
+
+- name: Bind remote address for mariadb on Redhat
+  ini_file: dest=/etc/mysql/my.cnf
+            section=mysqld
+            option=bind-address
+            value={{item}}
+  with_items:
+    - "{{mysql_bind_address}}"
+  notify:
+    - restart mariadb
+  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7

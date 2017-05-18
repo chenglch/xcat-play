@@ -15,10 +15,5 @@
   shell: pkill xcat3-network
   ignore_errors: True
 
-- name: Start xcat3-network daemon on Debian
-  shell: nohup /usr/local/bin/xcat3-network --config-file /etc/xcat3/xcat3.conf &
-  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
-
-- name: Start xcat3-network daemon on Redhat
-  shell: nohup /usr/bin/xcat3-network --config-file /etc/xcat3/xcat3.conf &
-  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7
+- name: Start xcat3-network daemon
+  shell: nohup xcat3-network --config-file /etc/xcat3/xcat3.conf &
