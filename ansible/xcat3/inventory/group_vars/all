@@ -4,9 +4,9 @@
 
 "mysql_root_pass": "password"
 "mysql_bind_address": "0.0.0.0"
+"mysql_bind_port": "3306"
 "mysql_xcat3_user": "xcat3"
 "mysql_xcat3_pass": "cluster"
-
 
 "xcat3_url": "https://github.com/chenglch/xcat3.git"
 "xcat3_client_url": "https://github.com/chenglch/python-xcat3client.git"
@@ -14,3 +14,4 @@
 "xcat3_api_ip_address": "10.5.102.73"
 
 "xcat3_data_dir": "/var/lib/xcat3"
+"xcat3_path" : "/opt/xcat3"

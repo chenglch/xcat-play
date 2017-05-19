@@ -18,6 +18,12 @@
   with_items:
     - rabbitmq-server
 
+- name: Open mariadb port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{rabbit_port}}/tcp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True
+
 # rabbitmq do not start automatically
 - name: Start RabbitMq Server
   systemd:

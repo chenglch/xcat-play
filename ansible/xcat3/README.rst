@@ -11,6 +11,8 @@ Use Cases
 Supported operating systems:
 
 * Ubuntu 16.04
+* Ubuntu 14.04
+* Redhat/Centos >= 7.0
 
 Run xcat3 playbook
 ==================
@@ -21,7 +23,7 @@ Download playbook
   git clone https://github.com/chenglch/xcat-play.git
 
 Modify the inventory variable in ``xcat-play/ansible/xcat3/inventory/host`` and
-``xcat-play/ansible/xcat3/inventory/group_vars`` to match your environment.
+``xcat-play/ansible/xcat3/inventory/group_vars/all`` to match your environment.
 
 Run the playbook
 

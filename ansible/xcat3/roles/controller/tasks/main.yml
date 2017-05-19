@@ -1,7 +1,5 @@
 ---
-- name: Stop xcat3-api service if exist
-  shell: pkill xcat3-api
-  ignore_errors: True
-
 - name: Start xcat3-api daemon
-  shell: nohup xcat3-api --config-file /etc/xcat3/xcat3.conf &
+  shell: |
+    pkill xcat3-api
+    nohup xcat3-api --config-file /etc/xcat3/xcat3.conf &

@@ -11,3 +11,8 @@
     daemon_reload: yes
     name: mariadb
   when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7
+
+- name: Reload firewalld configuration
+  shell: firewall-cmd --reload
+  ignore_errors: True
+  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7

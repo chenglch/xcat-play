@@ -1,5 +1,5 @@
 ---
-# Handler to handle contoctor notifications
+# Handler to handle conductor notifications
 
 - name: Restart apache24
   service: name=apache2 state=restarted

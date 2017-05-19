@@ -11,9 +11,7 @@
     - dhcp
   when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
 
-- name: Stop xcat3-network service if exist
-  shell: pkill xcat3-network
-  ignore_errors: True
-
-- name: Start xcat3-network daemon
-  shell: nohup xcat3-network --config-file /etc/xcat3/xcat3.conf &
+- name: Restart xcat3-network daemon
+  shell: |
+    pkill xcat3-network
+    nohup xcat3-network --config-file /etc/xcat3/xcat3.conf &

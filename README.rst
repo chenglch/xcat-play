@@ -11,7 +11,7 @@ For Ubuntu 14.04 or higher
 For Redhat 7
 ::
 
-  yum install python-devel python git python-setuptools gcc openssl-devel
+  yum install -y python-devel python git python-setuptools gcc openssl-devel libffi-devel
   easy_install pip
   pip install ansible
 
@@ -23,6 +23,6 @@ Please reference the links below to run the playbook you want:
   .. _xcat3: ansible/xcat3/README.rst
   .. _xcat2: ansible/xcat2/README.rst
   .. _ipmitool-xcat: ansible/ipmitool-xcat/README.rst
-  - xcat3: `xcat3`_
+  - Setup xcat3 prototype: `xcat3`_
   - xcat2(setup, and basic node provision): `xcat2`_
-  - ipmitool-xcat: `ipmitool-xcat`_
+  - Build ipmitool-xcat packages for multiple platforms: `ipmitool-xcat`_

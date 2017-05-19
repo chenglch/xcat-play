@@ -1,5 +1,6 @@
 ---
 "mysql_root_pass": "cluster"
 "mysql_bind_address": "0.0.0.0"
+"mysql_bind_port": "3306"
 "mysql_xcat3_user": "xcat3"
 "mysql_xcat3_pass": "cluster"

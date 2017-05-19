@@ -1,19 +1,4 @@
 ---
-- name: Disable selinux configuration
-  lineinfile:
-    path: /etc/selinux/config
-    regexp: 's/^SELINUX=.*$'
-    line: 'SELINUX=disabled'
-
-- name: Disable selinux
-  shell: setenforce 0
-
-- name: Stop firewalld
-  systemd:
-    state: stopped
-    name: firewalld
-  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7
-
 - name: Install rpm packages
   yum: name={{ item }} state=latest
   with_items:

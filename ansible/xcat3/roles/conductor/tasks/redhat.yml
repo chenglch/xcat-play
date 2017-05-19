@@ -13,3 +13,7 @@
 - name: Set conductor_bin variable
   set_fact:
     conductor_bin: "/usr/bin/xcat3-conductor"
+
+- name: Enable the permission for xcat3 tftpboot directory
+  shell: setsebool -P tftp_home_dir 1
+  ignore_errors: True

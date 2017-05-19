@@ -22,3 +22,9 @@
   notify:
     - restart mariadb
   when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7
+
+- name: Open mariadb port with firewall cmd
+  shell: firewall-cmd --zone=public --add-port={{mysql_bind_port}}/tcp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True
