@@ -11,6 +11,23 @@
     - dhcp
   when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
 
+- name: Add permission for pid, conf and lease files in apparmor ( do not work)
+  lineinfile:
+    dest: /etc/apparmor.d/usr.sbin.dhcpd
+    regexp: "{{ item }}"
+    insertafter: "/usr/sbin/dhcpd {"
+    line: "{{ item }}"
+  with_items:
+    - "/var/run/xcat3/dhcpd.pid rwl,"
+    - "/etc/xcat3/dhcpd.conf rwl,"
+    - "/var/lib/xcat3/dhcpd.leases rwl,"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Reload apparmor configuration for dhcpd
+  shell: |
+    apparmor_parser -R /etc/apparmor.d/usr.sbin.dhcpd
+  ignore_errors: True
+
 - name: Restart xcat3-network daemon
   shell: |
     pkill xcat3-network
