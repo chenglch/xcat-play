@@ -1,0 +1,9 @@
+---
+- name: Install packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - httpd
+
+- name: Create configuration file for httpd service
+  template: src=templates/xcat.conf.apache24 dest=/etc/httpd/conf.d/xcat.conf owner=root mode=0644
+  notify: Restart httpd

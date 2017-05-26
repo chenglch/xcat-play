@@ -1,0 +1,17 @@
+---
+- name: Install packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - apache2
+
+- name: Create configuration file for apache2 service
+  template: src=templates/xcat.conf.apache24 dest=/etc/apache2/conf-available//xcat.conf owner=root mode=0600
+
+- name: Enable xcat apache mod
+  file:
+    src: "/etc/apache2/conf-available/{{ item }}"
+    dest: "/etc/apache2/conf-enabled/{{ item }}"
+    state: link
+  with_items:
+    - xcat.conf
+  notify: Restart apache24

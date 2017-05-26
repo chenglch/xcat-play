@@ -1,0 +1,10 @@
+---
+# Handler to handle conductor notifications
+
+- name: Restart apache24
+  service: name=apache2 state=restarted
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Restart httpd
+  systemd: name=httpd state=restarted daemon_reload=yes
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
