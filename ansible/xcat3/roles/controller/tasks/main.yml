@@ -12,3 +12,12 @@
   shell: |
     pkill xcat3-api
     nohup xcat3-api --config-file /etc/xcat3/xcat3.conf &
+
+- stat: path=/root/.ssh/id_rsa
+  register: stat_sshkey
+
+- name: Generate SSH keys
+  shell: ssh-keygen -b 2048 -t rsa -f /root/.ssh/id_rsa -q -N ""
+  args:
+    creates: /root/.ssh/id_rsa
+  when: "stat_sshkey.stat.exists == False"
