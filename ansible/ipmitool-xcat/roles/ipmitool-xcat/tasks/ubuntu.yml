@@ -1,6 +1,15 @@
 - name: Add execution permission for make_deb.sh script
   file: path=/tmp/xcat-dep/ipmitool/make_deb.sh mode=u+x
 
+- name: Rename source.list file to source.list.ansible
+  command: mv /etc/apt/sources.list /etc/apt/sources.list.ansible
+
+- name: Copy rpm x86_64 dependencies for sles11.4
+  copy: src="{{ item }}" dest=/etc/apt/sources.list
+  with_items:
+    - "sources.list_ubuntu1404"
+  when: (ansible_distribution_version == "14.04")
+
 - name: Ensure apt cache is up to date
   apt: update_cache=yes
   ignore_errors: True
@@ -16,12 +25,16 @@
     - debhelper
     - build-essential
 
-- name: Make deb package on ubuntu
+- name: Rename source.list.ansible back to source.list
+  command: mv /etc/apt/sources.list.ansible /etc/apt/sources.list
+
+- name: Make deb package on ubuntu(make_deb.sh always return 0 even error happens)
   shell: ./make_deb.sh chdir=/tmp/xcat-dep/ipmitool
 
-- name: Find the target package file
+- name: Find the target package file, If not found fails
   find: paths="{{ xcat_dep_path }}/ipmitool" recurse=no patterns="*.deb"
   register: file_to_copy
+  failed_when: "file_to_copy.files |length == 0"
 
 - name: Copy the deb package to local
   fetch:

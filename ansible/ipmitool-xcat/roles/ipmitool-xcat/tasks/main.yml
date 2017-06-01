@@ -1,5 +1,5 @@
 ---
-tasks:
+
 - name: Delete xcat-dep directory on remote
   file: path="{{ xcat_dep_path }}" state=absent
 

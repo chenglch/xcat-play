@@ -121,6 +121,7 @@
 - name: Find the target package file
   find: paths="{{ xcat_rhels_target_path }}" recurse=yes patterns="*.rpm"
   register: file_to_copy
+  failed_when: "file_to_copy.files |length == 0"
 
 - name: Copy the rpm package to local
   fetch:
