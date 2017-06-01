@@ -12,3 +12,11 @@
 
 - name: Create xCAT3 configuration file
   template: src=templates/xcat3.sh dest=/etc/profile.d/xcat3.sh owner=root mode=0600
+
+- name: Update bashrc for PythonBrew for foo user
+  lineinfile:
+    dest=/root/.bashrc
+    line="source {{xcat3_client_path}}/tools/xcat3.bash_completion"
+    state=present
+    insertafter=EOF
+    create=True
