@@ -1,5 +1,5 @@
 ---
-# Handler to handle DB tier notifications
+# Handler to handle MQ tier notifications
 
 - name: Reload firewalld configuration
   shell: firewall-cmd --reload

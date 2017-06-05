@@ -8,3 +8,8 @@
 - name: Restart httpd
   systemd: name=httpd state=restarted daemon_reload=yes
   when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Reload firewalld configuration
+  shell: firewall-cmd --reload
+  ignore_errors: True
+  when: (ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS') and ansible_distribution_version|int >=7

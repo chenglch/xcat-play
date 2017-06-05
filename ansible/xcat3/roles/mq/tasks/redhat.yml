@@ -18,7 +18,7 @@
   with_items:
     - rabbitmq-server
 
-- name: Open mariadb port with firewall-cmd
+- name: Open rabbitmq port with firewall-cmd
   shell: firewall-cmd --zone=public --add-port={{rabbit_port}}/tcp --permanent
   notify:
     - Reload firewalld configuration

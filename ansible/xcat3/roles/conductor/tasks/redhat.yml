@@ -17,3 +17,15 @@
 - name: Enable the permission for xcat3 tftpboot directory
   shell: setsebool -P tftp_home_dir 1
   ignore_errors: True
+
+- name: Open httpd port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{apache_port}}/tcp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True
+
+- name: Open tftpd port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{tftpd_port}}/udp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True
