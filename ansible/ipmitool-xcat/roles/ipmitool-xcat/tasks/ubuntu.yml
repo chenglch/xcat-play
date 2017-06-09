@@ -4,11 +4,16 @@
 - name: Rename source.list file to source.list.ansible
   command: mv /etc/apt/sources.list /etc/apt/sources.list.ansible
 
-- name: Copy rpm x86_64 dependencies for sles11.4
+- name: Copy source.list file to target ubuntu system
   copy: src="{{ item }}" dest=/etc/apt/sources.list
   with_items:
-    - "sources.list_ubuntu1404"
-  when: (ansible_distribution_version == "14.04")
+    - "sources.list_ubuntu_{{ansible_distribution_version}}_{{ansible_architecture}}"
+
+- name: Copy source.list for ppc64le on ubuntu 14.04 system
+  copy: src="{{ item }}" dest=/etc/apt/sources.list
+  with_items:
+    - "sources.list_ubuntu1404_ppc64le"
+  when: (ansible_distribution_version == "14.04") and (ansible_architecture == "ppc64le")
 
 - name: Ensure apt cache is up to date
   apt: update_cache=yes
