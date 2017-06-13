@@ -1,5 +1,5 @@
 - name: Add execution permission for make_deb.sh script
-  file: path=/tmp/xcat-dep/ipmitool/make_deb.sh mode=u+x
+  file: path={{xcat_dep_path}}/conserver/make_deb.sh mode=u+x
 
 - name: Rename source.list file to source.list.ansible
   command: mv /etc/apt/sources.list /etc/apt/sources.list.ansible
@@ -28,17 +28,17 @@
   command: mv /etc/apt/sources.list.ansible /etc/apt/sources.list
 
 - name: Make deb package on ubuntu(make_deb.sh always return 0 even error happens)
-  shell: ./make_deb.sh chdir=/tmp/xcat-dep/ipmitool
+  shell: ./make_deb.sh chdir={{xcat_dep_path}}/conserver
 
 - name: Find the target package file, If not found fails
-  find: paths="{{ xcat_dep_path }}/ipmitool" recurse=no patterns="*.deb"
+  find: paths="{{ xcat_dep_path }}/conserver" recurse=no patterns="*.deb"
   register: file_to_copy
   failed_when: "file_to_copy.files |length == 0"
 
 - name: Copy the deb package to local
   fetch:
     src: "{{ item.path }}"
-    dest: "{{ xcat_ipmitool_target_path }}/{{ item.path.split('/')[-1] }}"
+    dest: "{{ xcat_conserver_target_path }}/{{ item.path.split('/')[-1] }}"
     flat: yes
   when: (file_to_copy is defined) and (file_to_copy.files is defined) and
         (item is defined) and (item.path is defined)

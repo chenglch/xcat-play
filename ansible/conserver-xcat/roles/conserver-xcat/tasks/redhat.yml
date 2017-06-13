@@ -1,0 +1,31 @@
+- name: Add execution permission for bldconserver.pl script
+  file: path={{xcat_dep_path}}/conserver/bldconserver.pl mode=u+x
+
+- name: install the dependency to build packages
+  yum: name={{ item }}
+  with_items:
+    - gcc
+    - openssl-devel
+    - rpm-build
+    - make
+
+- name: Delete temp build directory on remote if exist
+  file: path="{{ xcat_rhels_target_path }}" state=absent
+  ignore_errors: True
+
+- name: Make rpm package on redhat sysstem
+  shell: ./bldconserver.pl chdir={{xcat_dep_path}}/conserver
+
+- name: Find the target package file
+  find: paths="{{ xcat_rhels_target_path }}" recurse=yes patterns="*.rpm"
+  register: file_to_copy
+  failed_when: "file_to_copy.files |length == 0"
+
+- name: Copy the rpm package to local
+  fetch:
+    src: "{{ item.path }}"
+    dest: "{{ xcat_conserver_target_path }}/{{ item.path.split('/')[-3] }}/{{ item.path.split('/')[-2] }}/{{ item.path.split('/')[-1] }}"
+    flat: yes
+  when: (file_to_copy is defined) and (file_to_copy.files is defined) and
+        (item is defined) and (item.path is defined)
+  with_items: "{{ file_to_copy.files }}"

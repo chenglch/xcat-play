@@ -1,0 +1,17 @@
+---
+"xcat_dep_url": "https://github.com/xcat2/xcat-dep.git"
+"xcat_dep_path": "/tmp/xcat-dep"
+"xcat_conserver_target_path": "/tmp/build/conserver/"
+"xcat_rhels_target_path": "/tmp/build/"
+
+# for sles12 and sles 11.4
+sles_packages:
+  "sles_12_x86_64_openssl": "libopenssl-devel-1.0.1i-2.12.x86_64.rpm"
+  "sles_12_x86_64_zlib": "zlib-devel-1.2.8-5.1.x86_64.rpm"
+  "sles_11_x86_64_openssl": "libopenssl-devel-0.9.8j-0.70.1.x86_64.rpm"
+  "sles_11_x86_64_zlib": "zlib-devel-1.2.7-0.12.3.x86_64.rpm"
+  "sles_11_ppc64_openssl": "libopenssl-devel-0.9.8j-0.70.1.ppc64.rpm"
+  "sles_11_ppc64_zlib": "zlib-devel-1.2.7-0.12.3.ppc64.rpm"
+  "sles_12_ppc64le_openssl": "libopenssl-devel-1.0.1i-2.12.ppc64le.rpm"
+  "sles_12_ppc64le_zlib": "zlib-devel-1.2.8-5.1.ppc64le.rpm"
+

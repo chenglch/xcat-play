@@ -1,7 +1,7 @@
-Build ipmitool-xcat
-=========
+Build conserver-xcat
+=====================
 
-ipmitool-xcat is a playbook to build packages for various platforms.
+conserver-xcat is a playbook to build packages for various platforms.
 
 
 Usage
@@ -12,17 +12,17 @@ packages are built. If you use sshpass to connect to the hosts, make sure hosts
 key are added in the `known_hosts` file.
 
 Copy rpm dependencies which are needed to complie the openssl library into
-``ansible/ipmitool-xcat/roles/ipmitool-xcat/files`` directory.(Only for sles)
+``ansible/conserver-xcat/roles/conserver-xcat/files`` directory.(Only for sles)
 
 Example
 -------
 
-Run the ipmitool-xcat playbook to build packages::
+Run the conserver-xcat playbook to build packages::
 
-  cd ansible/ipmitool-xcat
-  ansible-playbook -i inventory/host ipmitool-xcat.yml
+  cd ansible/conserver-xcat
+  ansible-playbook -i inventory/host conserver-xcat.yml
 
-`ipmitool-xcat` packages will be placed in `/tmp/build` directory.
+`conserver-xcat` packages will be placed in `/tmp/build` directory.
 
 xCAT site
 =========

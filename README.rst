@@ -23,6 +23,8 @@ Please reference the links below to run the playbook you want:
   .. _xcat3: ansible/xcat3/README.rst
   .. _xcat2: ansible/xcat2/README.rst
   .. _ipmitool-xcat: ansible/ipmitool-xcat/README.rst
+  .. _conserver-xcat: ansible/conserver-xcat/README.rst
   - Setup xcat3 prototype: `xcat3`_
   - xcat2(setup, and basic node provision): `xcat2`_
   - Build ipmitool-xcat packages for multiple platforms: `ipmitool-xcat`_
+  - Build conserver-xcat packages for multiple platforms: `conserver-xcat`_

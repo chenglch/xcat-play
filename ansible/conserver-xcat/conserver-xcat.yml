@@ -1,0 +1,11 @@
+---
+
+- hosts:
+    - redhat
+    - ubuntu
+    - sles
+  name: "Build conserver"
+  become: yes
+  roles:
+    - role: conserver-xcat
+
