@@ -1,13 +1,18 @@
 ---
 
-- name: Delete xcat-dep directory on remote
+- name: Delete the xcat-dep from localhost
   file: path="{{ xcat_dep_path }}" state=absent
+  delegate_to: localhost
+  run_once: true
 
-- name: Get xcat-dep from github
+- name: Get xcat-dep from GitHub to localhost
   git: repo="{{ xcat_dep_url }}"
        dest="{{ xcat_dep_path }}"
   delegate_to: localhost
   run_once: true
+
+- name: Delete xcat-dep directory on remote
+  file: path="{{ xcat_dep_path }}" state=absent
 
 - name: Create xcat-dep directory
   file: path=/tmp/xcat-dep state=directory
