@@ -1,16 +1,24 @@
 [redhat]
-10.5.101.64 # th7 x86
-10.5.101.65 # rh6 x86
-10.2.3.2 # rh7 ppc64
-10.2.3.4   # rh6 ppc64
-10.3.29.2  # rh7 ppc64le
+# Focus on RHEL 7
+# x.x.x.x        # rh6 ppc64
+10.2.5.7        # rh7 ppc64
+
+10.4.42.110     # rh7 x86_64
+# x.x.x.x        # rh6 x86_64
+
+10.3.31.180     # rh7.3 ppc64le
+
+
 [ubuntu]
-#testnode1 # ubuntu 16.04
-10.5.101.11 # ubuntu 14.04 x86_64
-10.3.4.10 #ubuntu 14.04 ppc64le
+10.4.42.111     # ubuntu 14.04 x86_64
+10.3.31.182     # ubuntu 14.04.1 ppc64le
 
 [sles]
-10.5.101.70
-10.5.101.72    # x86_64 sles 11.4
-10.3.4.4  # ppc64le sles12
-#10.2.1.25 # ppc64 sles11.4  ansible error
+# Focus on SLES 12 
+
+# x.x.x.x        # sles11 ppc64  (does not work)
+
+# x.x.x.x        # sles11 x86_64
+10.4.42.112     # sles12 x86_64
+
+10.3.31.181     # sles12 ppc64le
