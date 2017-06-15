@@ -11,8 +11,9 @@ Edit ``./ansible/conserver-xcat/inventory/host`` to add hosts where the
 packages are built. If you use sshpass to connect to the hosts, make sure hosts
 key are added in the `known_hosts` file.
 
-Copy rpm dependencies which are needed to complie the openssl library into
-``ansible/ipmitool-xcat/roles/ipmitool-xcat/files`` directory.(Only for sles)
+For SLES, development related RPMs are shipped with the SDK ISO.  Ensure that 
+the `zypper` repo files are confgiured to point to an SDK repo, or the build for
+SLES will not work. 
 
 Example
 -------
@@ -22,7 +23,7 @@ Run the ipmitool-xcat playbook to build packages::
   cd ansible/ipmitool-xcat
   ansible-playbook -i inventory/host ipmitool-xcat.yml
 
-`ipmitool-xcat` packages will be placed in `/tmp/build` directory.
+`ipmitool-xcat` packages will be placed in `/tmp/build` directory on the localhost.
 
 xCAT site
 =========
