@@ -2,7 +2,7 @@
   file: path={{xcat_dep_path}}/conserver/make_deb.sh mode=u+x
 
 - name: Rename source.list file to source.list.ansible
-  command: mv /etc/apt/sources.list /etc/apt/sources.list.ansible
+  command: cp /etc/apt/sources.list /etc/apt/sources.list.ansible
 
 - name: Copy source.list file to target ubuntu system
   copy: src="{{ item }}" dest=/etc/apt/sources.list
@@ -24,8 +24,11 @@
     - debhelper
     - build-essential
 
-- name: Rename source.list.ansible back to source.list
-  command: mv /etc/apt/sources.list.ansible /etc/apt/sources.list
+- name: Copy the sources.list file back
+  command: cp /etc/apt/sources.list.ansible /etc/apt/sources.list
+
+- name: Delete the sources.list file created by ansible
+  file: path="/etc/apt/sources.list.ansible" state=absent
 
 - name: Make deb package on ubuntu(make_deb.sh always return 0 even error happens)
   shell: ./make_deb.sh chdir={{xcat_dep_path}}/conserver
