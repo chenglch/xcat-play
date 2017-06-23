@@ -10,9 +10,13 @@ Use Cases
 
 Supported operating systems:
 
-* Ubuntu 16.04
-* Ubuntu 14.04
-* Redhat/Centos >= 7.0
+* Ubuntu 16.04, 14.04
+* Redhat/CentOS >= 7.0
+
+Supported arch:
+
+* ppc64le
+* x86_64
 
 Run xcat3 playbook
 ==================

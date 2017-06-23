@@ -1,7 +1,7 @@
 AliasMatch ^/install/(.*)$ "{{xcat3_data_dir}}/install/$1"
 AliasMatch ^/tftpboot/(.*)$ "{{xcat3_data_dir}}/tftpboot/$1"
 
-<Directory "{{xcat3_data_dir}}/tftpboott">
+<Directory "{{xcat3_data_dir}}/tftpboot">
     Options Indexes FollowSymLinks Includes MultiViews
     AllowOverride None
     Order allow,deny

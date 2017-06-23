@@ -8,10 +8,10 @@ For Ubuntu 14.04 or higher
   apt-get update && apt-get install -y python-dev python-pip libffi-dev libssl-dev git
   pip install ansible
 
-For Redhat 7
+For Redhat 7 / CentOS 7
 ::
 
-  yum install -y python-devel python git python-setuptools gcc openssl-devel libffi-devel
+  yum install -y python-devel python git python-setuptools gcc openssl-devel libffi-devel file make
   easy_install pip
   pip install ansible
 
