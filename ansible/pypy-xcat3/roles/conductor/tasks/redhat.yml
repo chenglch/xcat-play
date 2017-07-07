@@ -1,0 +1,31 @@
+---
+- name: Install packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - httpd
+    - tftp-server
+    - xinetd
+
+- name: Create configuration file for httpd service
+  template: src=templates/xcat.conf.apache24 dest=/etc/httpd/conf.d/xcat.conf owner=root mode=0644
+  notify: Restart httpd
+
+- name: Set conductor_bin variable
+  set_fact:
+    conductor_bin: "/usr/bin/xcat3-conductor"
+
+- name: Enable the permission for xcat3 tftpboot directory
+  shell: setsebool -P tftp_home_dir 1
+  ignore_errors: True
+
+- name: Open httpd port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{apache_port}}/tcp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True
+
+- name: Open tftpd port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{tftpd_port}}/udp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True

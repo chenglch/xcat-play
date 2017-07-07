@@ -1,0 +1,45 @@
+---
+- hosts:
+  - db
+
+  name: "Setup database"
+  become: yes
+  roles:
+    - role: db
+
+- hosts:
+  - mq
+
+  name: "Setup message queue"
+  become: yes
+  roles:
+    - role: mq
+
+- hosts:
+  - controller
+  name: "Setup xcat3 controller node"
+  become: yes
+  roles:
+    - role: controller
+
+- hosts:
+  - conductor
+  name: "Setup xcat3 conductor node"
+  become: yes
+  roles:
+    - role: conductor
+
+- hosts:
+  - network
+
+  name: "Setup xcat3 network node"
+  become: yes
+  roles:
+    - role: network
+
+- hosts:
+  - client
+  name: "Setup python-xcat3client"
+  become: yes
+  roles:
+    - role: client

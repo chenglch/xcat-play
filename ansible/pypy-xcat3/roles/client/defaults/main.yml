@@ -1,0 +1,11 @@
+---
+"xcat3_client_path": "/opt/python-xcat3client"
+"xcat3_client_url": "https://github.com/chenglch/python-xcat3client.git"
+"xcat3_api_port": "3010"
+
+golang_url:
+  "x86_64": "https://storage.googleapis.com/golang/go1.8.3.linux-amd64.tar.gz"
+  "ppc64le": "https://storage.googleapis.com/golang/go1.8.3.linux-ppc64le.tar.gz"
+
+"golang_xcat3_url": "github.com/chenglch/golang-xcat3client"
+"GOPATH": "/opt/golang"

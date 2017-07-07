@@ -1,0 +1,18 @@
+---
+- name: Install rabbitmq rpm packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - rabbitmq-server
+
+- name: Open rabbitmq port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{rabbit_port}}/tcp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True
+
+# rabbitmq do not start automatically
+- name: Start RabbitMq Server
+  systemd:
+    state: started
+    daemon_reload: yes
+    name: rabbitmq-server

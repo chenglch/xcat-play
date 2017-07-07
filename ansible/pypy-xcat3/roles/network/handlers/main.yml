@@ -1,0 +1,6 @@
+---
+- name: Restart xcat3-network daemon
+  shell: |
+    pkill xcat3-network
+    nohup xcat3-network --config-file /etc/xcat3/xcat3.conf &
+

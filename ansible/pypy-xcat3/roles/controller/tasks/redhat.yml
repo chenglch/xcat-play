@@ -1,0 +1,21 @@
+---
+- name: Install packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - httpd
+
+- name: Create configuration file for httpd service
+  template: src=templates/xcat.conf.apache24 dest=/etc/httpd/conf.d/xcat.conf owner=root mode=0644
+  notify: Restart httpd
+
+- name: Open httpd port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{apache_port}}/tcp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True
+
+- name: Open httpd port with firewall-cmd
+  shell: firewall-cmd --zone=public --add-port={{xcat3_api_port}}/tcp --permanent
+  notify:
+    - Reload firewalld configuration
+  ignore_errors: True

@@ -1,0 +1,15 @@
+AliasMatch ^/install/(.*)$ "{{xcat3_data_dir}}/install/$1"
+AliasMatch ^/tftpboot/(.*)$ "{{xcat3_data_dir}}/tftpboot/$1"
+
+<Directory "{{xcat3_data_dir}}/tftpboott">
+    Options Indexes FollowSymLinks Includes MultiViews
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>
+<Directory "{{xcat3_data_dir}}/install/">
+    Options Indexes FollowSymLinks Includes MultiViews
+    AllowOverride None
+    Order allow,deny
+    Allow from all
+</Directory>

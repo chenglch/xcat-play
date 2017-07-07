@@ -1,0 +1,29 @@
+---
+- name: Install deb packages
+  apt: name={{ item }} state=latest
+  with_items:
+    - ntp
+    - build-essential
+    - pypy-dev
+    - libssl-dev
+    - libmysqlclient-dev
+    - libxml2-dev
+    - libxslt-dev
+    - libpq-dev
+    - libffi-dev
+    - gettext
+    - git
+    - pypy
+
+- name: Download get-pip for ubuntu system
+  get_url:
+    url: "{{get_pip}}"
+    dest: /tmp/get-pip.py
+
+- name: Setup pip with get-pip
+  shell: pypy /tmp/get-pip.py
+
+- name: set pypy root
+  set_fact:
+    pypy_root: "/usr/lib/pypy"
+    pypy_bin: "/usr/local/bin/"

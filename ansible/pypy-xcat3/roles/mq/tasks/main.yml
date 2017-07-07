@@ -1,0 +1,17 @@
+---
+- name: Include ubuntu template to setup common roles
+  include: ubuntu.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Include ubuntu template to setup common roles
+  include: redhat.yml
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- rabbitmq_user:
+    user: "{{ rabbit_user }}"
+    password: "{{ rabbit_password }}"
+    vhost: /
+    configure_priv: .*
+    read_priv: .*
+    write_priv: .*
+    state: present

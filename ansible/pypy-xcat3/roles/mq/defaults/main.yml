@@ -1,0 +1,4 @@
+---
+"rabbit_user": "xcat3"
+"rabbit_password": "cluster"
+"rabbit_port": "5672"

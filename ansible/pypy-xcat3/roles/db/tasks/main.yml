@@ -1,0 +1,52 @@
+---
+- name: Install python dependency for mysql-python
+  pip:
+    name: "{{ item }}"
+  with_items:
+    - MySQL-python
+
+- name: Include ubuntu template to setup common roles
+  include: ubuntu.yml
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: Include ubuntu template to setup common roles
+  include: redhat.yml
+  when: ansible_distribution == 'RedHat' or ansible_distribution == 'CentOS'
+
+- name: Fluash mysql configuration
+  meta: flush_handlers
+
+- name: Update MySQL root password for all root accounts
+  mysql_user: name=root host={{ item }} password={{ mysql_root_pass }} state=present
+  with_items:
+    - "{{ ansible_hostname }}"
+    - "{{ ansible_default_ipv4.address }}"
+    - 127.0.0.1
+    - ::1
+    - localhost
+
+- name: copy .my.cnf file with root password credentials
+  template: src=templates/my.cnf dest=/root/.my.cnf owner=root mode=0600
+
+- name: Create a new database with name 'xcat3'
+  mysql_db:
+    name: xcat3
+    state: present
+
+- name: Set user privileges for xcat3 in mysql
+  mysql_user:
+    user={{ mysql_xcat3_user }}
+    password={{ mysql_xcat3_pass }}
+    host={{ item }}
+    state=present
+    priv='xcat3.*:ALL'
+  with_items:
+    - "{{ ansible_hostname }}"
+    - "{{ ansible_default_ipv4.address }}"
+    - "%"
+
+- name: Create alembic directory (temporary step at development stage)
+  file: path={{xcat3_path}}/xcat3/db/sqlalchemy/alembic/versions state=directory
+
+- name: Sync database with python object
+  shell: pypy {{pypy_bin}}/xcat3-dbsync --config-file /etc/xcat3/xcat3.conf create_schema

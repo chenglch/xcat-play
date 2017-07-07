@@ -17,3 +17,7 @@
   with_items:
     - xcat.conf
   notify: Restart apache24
+
+- name: Set conductor_bin variable
+  set_fact:
+    conductor_bin: "/usr/locl/bin/xcat3-conductor"

@@ -1,0 +1,42 @@
+---
+- name: Create rpm cache directory
+  file: path=/tmp/cache state=directory
+
+- name: Enable epel yum repo
+  copy: src="{{ item }}" dest=/tmp/cache
+  with_items:
+    - "{{ epel_rpm }}"
+
+- name: Setup epel yum repo
+  yum: name={{ item }} state=present
+  with_items:
+    - "/tmp/cache/{{ epel_rpm }}"
+  ignore_errors: True
+
+- name: Install rpm packages
+  yum: name={{ item }} state=latest
+  with_items:
+    - pypy-devel
+    - openssl-devel
+    - mysql-devel
+    - libxml2-devel
+    - libxslt-devel
+    - postgresql-devel
+    - git
+    - libffi-devel
+    - gettext
+    - python-setuptools
+    - gcc
+    - pypy
+
+- name: Setup pip with ensurepip
+  shell: pypy -m ensurepip
+
+- name: Find the target package file
+  command: find /usr/lib64/ -name "pypy-*"
+  register: pypy_result
+
+- name: set pypy root
+  set_fact:
+    pypy_root: "{{pypy_result.stdout_lines[0]}}"
+    pypy_bin: "{{pypy_result.stdout_lines[0]}}/bin"

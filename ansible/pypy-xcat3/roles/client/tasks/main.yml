@@ -1,0 +1,17 @@
+---
+- name: Creates golang  directory
+  file: path={{ GOPATH }} state=directory
+
+- name: Download golang tarball for x86_64
+  get_url:
+    url: "{{golang_url[ansible_architecture]}}"
+    dest: /opt/golang/golang.tar.gz
+
+- name: Setup golang and compile xcat3 client
+  shell: |
+    tar -C /usr/local -xzf /opt/golang/golang.tar.gz
+    GOPATH={{GOPATH}} /usr/local/go/bin/go get -v {{golang_xcat3_url}}
+    mv -f {{GOPATH}}/bin/golang-xcat3client /usr/bin/xcat3
+
+- name: Create xCAT3 environment file
+  template: src=templates/xcat3.sh dest=/etc/profile.d/xcat3.sh owner=root mode=0600

@@ -3,8 +3,6 @@
   apt: name={{ item }} state=latest
   with_items:
     - apache2
-    - tftpd-hpa
-    - xinetd
 
 - name: Create configuration file for apache2 service
   template: src=templates/xcat.conf.apache24 dest=/etc/apache2/conf-available//xcat.conf owner=root mode=0600
